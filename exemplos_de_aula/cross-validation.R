@@ -7,10 +7,11 @@ library(ISLR2)
 # Dados -------------------------------------------------------------------
 data("Hitters")
 #Hitters <- na.omit(Hitters)
+help(Hitters)
 
 # base treino e teste -----------------------------------------------------
 set.seed(123)
-hitters_initial_split <- Hitters %>% initial_split(3/4)
+hitters_initial_split <- Hitters %>% drop_na() |> initial_split(3/4)
 
 hitters_train <- training(hitters_initial_split)
 hitters_test <- testing(hitters_initial_split)
@@ -18,16 +19,26 @@ hitters_test <- testing(hitters_initial_split)
 # Dataprep ----------------------------------------------------------------
 
 hitters_recipe <- recipe(Salary ~ ., data = hitters_train) %>%
-  step_naomit(everything(), skip = TRUE) %>%
-  step_rm(all_nominal()) %>%
-  step_normalize(all_numeric_predictors())
+  # tudo que vem depois de "recipe" é "step_" alguma coisa
+  # step_naomit(everything(), skip = TRUE) |>
+# seletores relevantes (pra aplicar um passo em várias colunas)
+# de uma vez: everything(), all_nominal() 'categoricas',
+# all_numerical() 'numeros'/'continuas'
+# all_predictors(), all_outcomes()
+  #step_rm(all_nominal()) %>%
+  #step_normalize(all_numeric_predictors()) |>
+  #step_log(all_numeric()) |>
+  step_normalize(all_numeric()) |>
+  step_dummy(all_nominal()) |>
+  step_bs(HmRun, degree= 3)
 
 # dar uma olhada no resultado da receita.
 rec_prep <- hitters_recipe %>%
   prep()
 
 rec_prep %>%
-  bake(new_data = NULL)
+  bake(new_data = hitters_train) |>
+  View()
 
 juice(rec_prep) %>% glimpse()
 
@@ -38,6 +49,7 @@ juice(rec_prep) %>% glimpse()
 # queremos encontrar o melhor valor.
 hitters_model <- linear_reg(
   penalty = tune()
+  # penalty = lambda
 ) %>%
   set_engine("glmnet") %>%
   set_mode("regression")
@@ -51,11 +63,13 @@ hitters_wflow <- workflow() %>%
 # tunagem de hiperparametros ----------------------------------------------
 
 # reamostragem com cross-validation ---------------------------------------
-hitters_resamples <- vfold_cv(hitters_train, v = 10)
+hitters_resamples <- vfold_cv(hitters_train, v = 5)
+#hitters_resamples <- loo_cv(hitters_train)
+#hitters_resamples <- mc_cv(hitters_train, prop = 3/4, times = 50)
 
 hitters_grid <- grid_regular(
-  penalty(c(-1, 2)),
-  levels = 10
+  penalty(c(-2, 2)),
+  levels = 20
 )
 #hitters_grid <- tibble(penalty = seq(0.1, 2, length.out = 20))
 
@@ -63,13 +77,14 @@ hitters_tune_grid <- tune_grid(
   hitters_wflow,
   resamples = hitters_resamples,
   grid = hitters_grid,
-  metrics = metric_set(rmse, rsq),
+  metrics = metric_set(rmse, rsq, mae),
   control = control_grid(verbose = TRUE, allow_par = FALSE)
 )
 
 # inspecao da tunagem -----------------------------------------------------
 # hitters_tune_grid$.metrics[[3]]
 autoplot(hitters_tune_grid)
+
 collect_metrics(hitters_tune_grid) %>%
   ggplot(aes(x = penalty, y = mean)) +
   geom_point() +
@@ -78,11 +93,10 @@ collect_metrics(hitters_tune_grid) %>%
   facet_wrap(~.metric, scales = "free_y") +
   scale_x_log10()
 
-
-show_best(hitters_tune_grid, n = 1, metric = "rmse")
+show_best(hitters_tune_grid, n = 1, metric = "mae")
 
 # seleciona o melhor conjunto de hiperparametros
-hitters_best_hiperparams <- select_best(hitters_tune_grid, "rmse")
+hitters_best_hiperparams <- select_best(hitters_tune_grid, "mae")
 
 hitters_wflow <- hitters_wflow %>%
   finalize_workflow(hitters_best_hiperparams)
@@ -94,10 +108,13 @@ hitters_model_train <- hitters_wflow %>%
 
 pred <- predict(hitters_model_train, hitters_test)
 bind_cols(pred, hitters_test) %>% rmse(truth = Salary, estimate = .pred)
+bind_cols(pred, hitters_test) %>% mae(truth = Salary, estimate = .pred)
+bind_cols(pred, hitters_test) %>% rsq(truth = Salary, estimate = .pred)
 
 pred <- predict(hitters_model_train, hitters_train)
 bind_cols(pred, hitters_train) %>% rmse(truth = Salary, estimate = .pred)
-
+bind_cols(pred, hitters_train) %>% mae(truth = Salary, estimate = .pred)
+bind_cols(pred, hitters_train) %>% rsq(truth = Salary, estimate = .pred)
 
 hitters_last_fit <- hitters_wflow %>%
   last_fit(split = hitters_initial_split)
@@ -110,7 +127,7 @@ collect_predictions(hitters_last_fit) %>%
 
 # modelo final ------------------------------------------------------------
 
-hitters_final_model <- hitters_wflow %>% fit(data = Hitters)
+hitters_final_model <- hitters_wflow %>% fit(data = drop_na(Hitters))
 
 # predicoes ---------------------------------------------------------------
 
@@ -136,19 +153,19 @@ atleta_novo <- tibble(
   PutOuts = 446L,
   Assists = 33L,
   Errors = 50L,
-  League = NA,
-  Division = NA,
-  NewLeague = NA
+  League = 'N',
+  Division = 'E',
+  NewLeague = 'A'
 )
 
 predict(hitters_final_model, new_data = atleta_novo)
 
 hitters_final_model %>%
   extract_fit_engine() %>%
-  coef(s = 21.5)
+  coef(s = 23.35)
 
 # guardar o modelo para usar depois ---------------------------------------
 saveRDS(hitters_final_model, file = "hitters_final_model.rds")
 
 modelo <- readRDS("hitters_final_model.rds")
-predict(modelo, Hitters)
+predict(modelo, atleta_novo)

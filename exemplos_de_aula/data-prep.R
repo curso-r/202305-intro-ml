@@ -64,6 +64,14 @@ ames %>%
   ggplot(aes(y = fct_reorder(Neighborhood, n), x = n)) +
   geom_col()
 
+ames %>%
+  dplyr::group_by(Neighborhood) %>%
+  summarise(Sale_Price_med = mean(Sale_Price),
+            n = n()) |>
+  ungroup() |>
+  ggplot(aes(y = fct_reorder(Neighborhood, n), x = Sale_Price_med)) +
+  geom_col()
+
 # Interacao numerico x categorico
 ames %>%
   ggplot(aes(x = log10(Gr_Liv_Area), y = Sale_Price)) +
@@ -93,8 +101,9 @@ ames %>%
 ames_recipe <- recipe(Sale_Price ~ ., data = ames_train) %>%
   step_cut(Bedroom_AbvGr, breaks = c(1,2,3,4), include_outside_range = TRUE) %>%
   #step_discretize(Bedroom_AbvGr, num_breaks = 4) %>%
-  step_other(Neighborhood, threshold = tune()) %>%
+  step_other(Neighborhood, threshold = 10) %>%
   step_log(Gr_Liv_Area, base = 10) %>%
+  step_bs(Lot_Area, degree = tune()) |>
   step_normalize(all_numeric_predictors()) %>%
   step_dummy(all_nominal_predictors()) %>%
   step_interact(~Gr_Liv_Area:starts_with("Bldg_Type_")) %>%
@@ -105,7 +114,7 @@ ames_recipe <- recipe(Sale_Price ~ ., data = ames_train) %>%
 ames_recipe %>%
   prep() %>%
   bake(new_data = NULL) %>%
-  glimpse()
+  View()
 
 # definicao do modelo -----------------------------------------------------
 
@@ -129,8 +138,9 @@ ames_wflow <- workflow() %>%
 ames_resamples <- vfold_cv(ames_train, v = 5)
 
 ames_grid <- grid_regular(
-  penalty(c(-6, -1)),
-  threshold(range = c(10, 100)),
+  penalty(c(-4, -2)),
+  #threshold(range = c(10, 100)),
+  degree(range = c(1,5)),
   levels = 10
 )
 
@@ -145,7 +155,7 @@ ames_tune_grid <- tune_grid(
 # inspecao da tunagem -----------------------------------------------------
 autoplot(ames_tune_grid)
 collect_metrics(ames_tune_grid) %>% View()
-show_best(ames_tune_grid, "mae")
+show_best(ames_tune_grid, "rmse") |> View()
 
 # seleciona o melhor conjunto de hiperparametros
 ames_best_hiperparams <- select_best(ames_tune_grid, "rmse")
@@ -162,7 +172,6 @@ collect_predictions(ames_last_fit) %>%
 
 # https://github.com/koalaverse/vip/pull/99
 vip::vip(extract_fit_engine(ames_last_fit), num_features = 20)
-
 
 # modelo final ------------------------------------------------------------
 ames_final_model <- ames_wflow %>% fit(data = ames)
