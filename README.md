@@ -27,13 +27,21 @@ Fora do horário de aula ou monitoria:
 
 ## Slides
 
-| Slide |
-|:------|
+| Slide                                                                                                       |
+|:------------------------------------------------------------------------------------------------------------|
+| [00-intro-curso.html](https://curso-r.github.io/202305-intro-ml/slides/00-intro-curso.html)                 |
+| [01-intro-ml.html](https://curso-r.github.io/202305-intro-ml/slides/01-intro-ml.html)                       |
+| [02-intro-classificacao.html](https://curso-r.github.io/202305-intro-ml/slides/02-intro-classificacao.html) |
+| [03-modelos-de-arvores.html](https://curso-r.github.io/202305-intro-ml/slides/03-modelos-de-arvores.html)   |
 
 ## Scripts utilizados em aula
 
 | Exemplo                                                                                                 |
 |:--------------------------------------------------------------------------------------------------------|
+| [arvores.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/arvores.R)                       |
+| [comparacao_modelos.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/comparacao_modelos.R) |
+| [cross-validation.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/cross-validation.R)     |
+| [data-prep.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/data-prep.R)                   |
 | [exemplo_tidymodels.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/exemplo_tidymodels.R) |
 | [overfitting.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/overfitting.R)               |
 
