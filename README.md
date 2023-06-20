@@ -36,14 +36,19 @@ Fora do horário de aula ou monitoria:
 
 ## Scripts utilizados em aula
 
-| Exemplo                                                                                                 |
-|:--------------------------------------------------------------------------------------------------------|
-| [arvores.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/arvores.R)                       |
-| [comparacao_modelos.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/comparacao_modelos.R) |
-| [cross-validation.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/cross-validation.R)     |
-| [data-prep.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/data-prep.R)                   |
-| [exemplo_tidymodels.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/exemplo_tidymodels.R) |
-| [overfitting.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/overfitting.R)               |
+| Exemplo                                                                                                     |
+|:------------------------------------------------------------------------------------------------------------|
+| [arvores.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/arvores.R)                           |
+| [comparacao_modelos.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/comparacao_modelos.R)     |
+| [comparacao_rf_xgb_lr.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/comparacao_rf_xgb_lr.R) |
+| [cross-validation.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/cross-validation.R)         |
+| [data-prep.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/data-prep.R)                       |
+| [exemplo_tidymodels.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/exemplo_tidymodels.R)     |
+| [overfitting.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/overfitting.R)                   |
+| [regressao_vs_rf.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/regressao_vs_rf.R)           |
+| [rf_e\_xbg_na_mao.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/rf_e_xbg_na_mao.R)          |
+| [tunando_xgboost.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/tunando_xgboost.R)           |
+| [xgboost_sql.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/xgboost_sql.R)                   |
 
 ## Práticas
 
