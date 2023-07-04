@@ -43,11 +43,16 @@ Fora do horário de aula ou monitoria:
 | [comparacao_rf_xgb_lr.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/comparacao_rf_xgb_lr.R) |
 | [cross-validation.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/cross-validation.R)         |
 | [data-prep.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/data-prep.R)                       |
+| [exemplo_modelo_ga.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/exemplo_modelo_ga.R)       |
 | [exemplo_tidymodels.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/exemplo_tidymodels.R)     |
 | [overfitting.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/overfitting.R)                   |
+| [preparacao_de_dados.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/preparacao_de_dados.R)   |
 | [regressao_vs_rf.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/regressao_vs_rf.R)           |
 | [rf_e\_xbg_na_mao.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/rf_e_xbg_na_mao.R)          |
 | [tunando_xgboost.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/tunando_xgboost.R)           |
+| [workflow_set.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/workflow_set.R)                 |
+| [workflow_set_v1.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/workflow_set_v1.R)           |
+| [workflow_set_v2.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/workflow_set_v2.R)           |
 | [xgboost_sql.R](https://curso-r.github.io/202305-intro-ml/exemplos_de_aula/xgboost_sql.R)                   |
 
 ## Práticas
